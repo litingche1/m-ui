@@ -10,6 +10,6 @@
 
 <style lang="scss">
     .fd{
-        color:red;
+        color:#58bc58;
     }
 </style>
