@@ -1,10 +1,18 @@
 import{createRouter,createWebHashHistory,RouteRecordRaw} from "vue-router";
 import Home from '../views/Home.vue'
+import container from '../components/container/src/index.vue'
 const routes:RouteRecordRaw[]=[
     {
         path:'/',
-        component:Home
+        component:container,
+        children:[
+            {
+                path:'/',
+                component:Home
+            }
+        ]
     }
+
 ]
 
 const router=createRouter({
