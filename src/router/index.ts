@@ -9,7 +9,12 @@ const routes:RouteRecordRaw[]=[
             {
                 path:'/',
                 component:Home
-            }
+            },
+            {
+                path:'/iconPicker',
+                component:()=>import('../views/iconPicker/index.vue')
+            },
+
         ]
     }
 

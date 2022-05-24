@@ -6,15 +6,6 @@
 </template>
 
 <style lang="scss">
- *{
-  marin:0;
-  padding:0;
- }
- svg{
-  width:1em;
-  height:1em;
- }
- html,body,#app,.el-container,.el-aside{
-  height: 100%;
- }
+@import './styles/base';
+@import './styles/ui';
 </style>

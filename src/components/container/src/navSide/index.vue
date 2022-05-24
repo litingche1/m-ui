@@ -7,11 +7,11 @@
     >
         <el-menu-item index="1">
             <el-icon-menu></el-icon-menu>
-            <template #title>Navigator One</template>
+            <template #title>首页</template>
         </el-menu-item>
         <el-menu-item index="2">
             <el-icon-menu></el-icon-menu>
-            <template #title>Navigator Two</template>
+            <template #title>图标选择器</template>
         </el-menu-item>
         <el-menu-item index="3">
             <el-icon-menu></el-icon-menu>
