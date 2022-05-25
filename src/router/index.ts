@@ -11,10 +11,13 @@ const routes:RouteRecordRaw[]=[
                 component:Home
             },
             {
-                path:'/iconPicker',
+                path:'/iconPicker',// 图标选择器组件
                 component:()=>import('../views/iconPicker/index.vue')
             },
-
+            {
+                path:'/cityComponent',// 城市三级联动组件
+                component:()=>import('../views/city/index.vue')
+            },
         ]
     }
 
