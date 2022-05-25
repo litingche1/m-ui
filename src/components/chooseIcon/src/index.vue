@@ -36,7 +36,6 @@
     }
     const copyItem=(text:string)=>{
         let data=`<el-icon-${text} />`
-        console.log(data)
         useCopy(data)
         dialogVisible.value = false
     }
