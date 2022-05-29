@@ -17,6 +17,10 @@
             <el-icon-menu></el-icon-menu>
             <template #title>城市下拉框联动组件</template>
         </el-menu-item>
+        <el-menu-item index="3">
+            <el-icon-menu></el-icon-menu>
+            <template #title>趋势标记</template>
+        </el-menu-item>
     </el-menu>
 </main>
 </template>

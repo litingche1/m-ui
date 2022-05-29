@@ -18,6 +18,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/cityComponent',// 城市三级联动组件
                 component:()=>import('../views/city/index.vue')
             },
+            {
+                path:'/trend',// 趋势标记
+                component:()=>import('../views/trend/index.vue')
+            },
         ]
     }
 

@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-    import mChooseCity from '../../components/chooseCity/src/index.vue'
+    // import mChooseCity from '../../components/chooseCity/src/index.vue'
     let changeValue = (val:Object) => {
         console.log(val)
     }
