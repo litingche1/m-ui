@@ -22,6 +22,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/trend',// 趋势标记
                 component:()=>import('../views/trend/index.vue')
             },
+            {
+                path:'/notice',// 通知
+                component:()=>import('../views/notification/index.vue')
+            },
         ]
     }
 

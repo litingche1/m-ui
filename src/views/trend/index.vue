@@ -6,6 +6,7 @@
             </div>
             <div>
                 <m-trend text="财富" type="down" reverseColor="true"></m-trend>
+                <m-trend text="32323财富" type="down" reverseColor="true" downIcon="caretbottom"></m-trend>
             </div>
         </article>
 
