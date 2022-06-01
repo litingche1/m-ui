@@ -11,11 +11,11 @@ const routes:RouteRecordRaw[]=[
                 component:Home
             },
             {
-                path:'/iconPicker',// 图标选择器组件
+                path:'/chooseIcon',// 图标选择器组件
                 component:()=>import('../views/iconPicker/index.vue')
             },
             {
-                path:'/cityComponent',// 城市三级联动组件
+                path:'/chooseArea',// 城市三级联动组件
                 component:()=>import('../views/city/index.vue')
             },
             {
@@ -23,8 +23,12 @@ const routes:RouteRecordRaw[]=[
                 component:()=>import('../views/trend/index.vue')
             },
             {
-                path:'/notice',// 通知
+                path:'/notification',// 通知
                 component:()=>import('../views/notification/index.vue')
+            },
+            {
+                path:'/menu',// 导航菜单
+                component:()=>import('../views/menu/index.vue')
             },
         ]
     }
