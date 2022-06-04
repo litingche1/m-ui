@@ -51,5 +51,7 @@
     }
     svg{
         margin-right: 6px;
+        width:1em;
+        height:1em;
     }
 </style>

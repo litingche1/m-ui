@@ -30,6 +30,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/menu',// 导航菜单
                 component:()=>import('../views/menu/index.vue')
             },
+            {
+                path:'/progress',// 进度条
+                component:()=>import('../views/progress/index.vue')
+            },
         ]
     }
 

@@ -5,6 +5,7 @@ import trend from './trend'
 import notice from './notice'
 import list from './list'
 import menu from './menu'
+import progress from './progress'
 const components=[
     chooseIcon,
     chooseCity,
@@ -12,6 +13,7 @@ const components=[
     notice,
     list,
     menu,
+    progress
 ]
 export default {
     install(app:App){
