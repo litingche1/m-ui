@@ -6,6 +6,7 @@ import notice from './notice'
 import list from './list'
 import menu from './menu'
 import progress from './progress'
+import chooseTime from './chooseTime'
 const components=[
     chooseIcon,
     chooseCity,
@@ -13,7 +14,8 @@ const components=[
     notice,
     list,
     menu,
-    progress
+    progress,
+    chooseTime
 ]
 export default {
     install(app:App){

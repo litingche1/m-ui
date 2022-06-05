@@ -34,6 +34,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/progress',// 进度条
                 component:()=>import('../views/progress/index.vue')
             },
+            {
+                path:'/chooseTime',// 时间选择
+                component:()=>import('../views/chooseTime/index.vue')
+            },
         ]
     }
 
