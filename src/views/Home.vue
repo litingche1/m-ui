@@ -13,4 +13,8 @@
     .fd{
         color:red;
     }
+    svg{
+        width: 1em;
+        height: 1em;
+    }
 </style>
