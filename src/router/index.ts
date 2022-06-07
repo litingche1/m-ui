@@ -38,6 +38,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/chooseTime',// 时间选择
                 component:()=>import('../views/chooseTime/index.vue')
             },
+            {
+                path:'/chooseCity',// 城市选择器
+                component:()=>import('../views/area/index.vue')
+            },
         ]
     }
 

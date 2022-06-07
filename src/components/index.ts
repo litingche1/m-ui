@@ -8,6 +8,7 @@ import menu from './menu'
 import progress from './progress'
 import chooseTime from './chooseTime'
 import chooseDate from './chooseDate'
+import area from './chooseCitys'
 const components=[
     chooseIcon,
     chooseCity,
@@ -17,7 +18,8 @@ const components=[
     menu,
     progress,
     chooseTime,
-    chooseDate
+    chooseDate,
+    area
 ]
 export default {
     install(app:App){
