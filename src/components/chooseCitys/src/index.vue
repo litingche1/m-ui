@@ -28,26 +28,52 @@
                 </el-col>
             </el-row>
         </article>
-        <article class="popover-con-city">
-            <div class="city-item" v-for="(value,key) in citys" :key="key">{{key}}</div>
-        </article>
-        <el-scrollbar max-height="400px">
-            <article class="city-con">
-                <template v-for="(value,key) in citys" :key="key">
-                    <el-row class="row-city">
-                        <el-col :span="2">
-                            {{key}}:
-                        </el-col>
-                        <el-col :span="22" class="city-name">
-                            <div v-for="item in value" :key="item.id" class="city-name-item">
-                                {{item.name}}
-                            </div>
-                        </el-col>
-                    </el-row>
-                </template>
-
+        <template v-if="radio==='按城市'">
+            <article class="popover-con-city">
+                <div class="city-item" v-for="(value,key) in citys" :key="key" @click="selectName(key)">{{key}}</div>
             </article>
-        </el-scrollbar>
+            <el-scrollbar max-height="400px">
+                <article class="city-con">
+                    <template v-for="(value,key) in citys" :key="key">
+                        <el-row class="row-city" :id="key">
+                            <el-col :span="2">
+                                {{key}}&nbsp;:
+                            </el-col>
+                            <el-col :span="22" class="city-name">
+                                <div v-for="item in value" :key="item.id" class="city-name-item"
+                                     @click="selectCity(item)">
+                                    {{item.name}}
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </template>
+
+                </article>
+            </el-scrollbar>
+        </template>
+        <template v-else>
+            <article class="popover-con-city">
+                <div class="city-item" v-for="(value,key) in areaData" :key="key" @click="selectName(key)">{{key}}</div>
+            </article>
+            <el-scrollbar max-height="400px">
+                <article class="city-con">
+                    <template v-for="(item,idx) in Object.values(areaData)" :key="idx">
+                        <el-row class="row-city" :id="item2.id" v-for="item2 in item" :key="item2.id">
+                            <el-col :span="3">
+                                {{item2.name}}&nbsp;:
+                            </el-col>
+                            <el-col :span="21" class="city-name">
+                                <div v-for="(item3,idx3) in item2.data" :key="idx3" class="city-name-item"
+                                     @click="selectCity2(item2,item3)">
+                                    {{item3}}
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </template>
+
+                </article>
+            </el-scrollbar>
+        </template>
 
     </el-popover>
 </template>
@@ -56,12 +82,16 @@
 
     import {ref} from 'vue'
     import city from '../lib/city'
+    import areaList from '../lib/province.json'
+    import {cityItem, areaItem} from './type'
 
-    let result = ref('请选择')
+    let result = ref<string | undefined>('请选择')
     let radio = ref('按城市')
     let value = ref('')
     let visible = ref(false)
     let citys = ref(city.cities)
+    let areaData = ref(areaList)
+    let emits = defineEmits(['cityChange', 'areaChange'])
     const options = [
         {
             value: 'Option1',
@@ -84,6 +114,23 @@
             label: 'Option5',
         },
     ]
+    const selectCity = (val: cityItem) => {
+        visible.value = false
+        result.value = val.name
+        emits('cityChange', val)
+    }
+    const selectCity2 = (val: areaItem, name: string) => {
+        visible.value = false
+        result.value = name
+        emits('areaChange', val)
+    }
+    const selectName = (val: string) => {
+        if (val) {
+            let el = document.getElementById(val)
+            el!.scrollIntoView()
+        }
+
+    }
 </script>
 
 <style scoped lang="scss">
