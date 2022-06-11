@@ -17,12 +17,12 @@
                     </el-radio-group>
                 </el-col>
                 <el-col :span="14" :offset="2">
-                    <el-select v-model="value" class="m-2" placeholder="Select">
+                    <el-select v-model="value" class="m-2" placeholder="请选择城市" filterable :filter-method="filterMethod" @change="selectChange">
                         <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
                         />
                     </el-select>
                 </el-col>
@@ -80,7 +80,7 @@
 
 <script lang="ts" setup>
 
-    import {ref} from 'vue'
+    import {ref,onMounted} from 'vue'
     import city from '../lib/city'
     import areaList from '../lib/province.json'
     import {cityItem, areaItem} from './type'
@@ -91,29 +91,9 @@
     let visible = ref(false)
     let citys = ref(city.cities)
     let areaData = ref(areaList)
+    let cityList=ref<cityItem[]>([])
     let emits = defineEmits(['cityChange', 'areaChange'])
-    const options = [
-        {
-            value: 'Option1',
-            label: 'Option1',
-        },
-        {
-            value: 'Option2',
-            label: 'Option2',
-        },
-        {
-            value: 'Option3',
-            label: 'Option3',
-        },
-        {
-            value: 'Option4',
-            label: 'Option4',
-        },
-        {
-            value: 'Option5',
-            label: 'Option5',
-        },
-    ]
+    let options = ref<cityItem[]>([])
     const selectCity = (val: cityItem) => {
         visible.value = false
         result.value = val.name
@@ -130,6 +110,36 @@
             el!.scrollIntoView()
         }
 
+    }
+    onMounted(()=>{
+        let values=Object.values(city.cities).flat()
+        options.value=values
+        cityList.value=values
+    })
+    const filterMethod=(val:string)=>{
+      if(val===''){
+          options.value=JSON.parse(JSON.stringify(cityList.value))
+      }else{
+          if(radio.value==='按城市'){
+              options.value=JSON.parse(JSON.stringify(cityList.value)).filter((item:cityItem)=>{
+                  return item.name!.includes(val) || item.spell!.includes(val)
+              })
+          }else{
+              options.value=JSON.parse(JSON.stringify(cityList.value)).filter((item:cityItem)=>{
+                  return item.name!.includes(val)
+              })
+          }
+      }
+    }
+    const selectChange = (val:number)=>{
+        let item=cityList.value.find((item:cityItem)=>item.id===val)
+        result.value=item!.name
+        visible.value = false
+        if(radio.value==='按城市'){
+            emits('cityChange', item)
+        }else{
+            emits('areaChange', item)
+        }
     }
 </script>
 
