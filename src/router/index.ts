@@ -42,6 +42,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/chooseCity',// 城市选择器
                 component:()=>import('../views/area/index.vue')
             },
+            {
+                path:'/form',// 表单
+                component:()=>import('../views/form/index.vue')
+            },
         ]
     }
 
