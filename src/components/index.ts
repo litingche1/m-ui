@@ -20,7 +20,8 @@ const components=[
     progress,
     chooseTime,
     chooseDate,
-    area
+    area,
+    form
 ]
 export default {
     install(app:App){

@@ -1,6 +1,6 @@
 import {RuleItem} from "./rule";
 
-export interface form{
+export interface fromItem{
     // 表单项显示的元素
     type: 'cascader' | 'checkbox' | 'checkbox-group' | 'checkbox-button' | 'color-picker' |
         'date-picker' | 'input' | 'input-number' | 'radio' | 'radio-group' | 'radio-button' | 'rate' |
