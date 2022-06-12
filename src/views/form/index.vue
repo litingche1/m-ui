@@ -1,7 +1,12 @@
 <template>
     <main>
         <m-form :options="options" label-width="120px">
-
+          <template #uploadArea>
+              <el-button type="primary">Click to upload</el-button>
+          </template>
+            <template #uploadTip>
+                jpg/png files with a size less than 500KB.
+            </template>
         </m-form>
     </main>
 </template>
@@ -45,9 +50,9 @@ let options:fromItem[]=[
     },
     rules: [
       {
-        required: true,
-        message: '职位不能为空',
-        trigger: 'change'
+          required: true,
+          message: 'Please select Activity zone',
+          trigger: ['blur']
       }
     ],
     children: [
@@ -70,14 +75,14 @@ let options:fromItem[]=[
   },
   {
     type: 'checkbox-group',
-    value: [1],
+    value: [],
     prop: 'like',
     label: '爱好',
     rules: [
       {
         required: true,
         message: '爱好不能为空',
-        trigger: 'change'
+        trigger: 'blur'
       }
     ],
     children: [
@@ -128,6 +133,14 @@ let options:fromItem[]=[
       }
     ]
   },
+    {
+        type:'upload',
+        prop:'upload',
+        label: '上传',
+        uploadAttrs:{
+            action:'https://jsonplaceholder.typicode.com/posts/'
+        }
+    }
 ]
 </script>
 
