@@ -1,5 +1,5 @@
 import {RuleItem} from "./rule";
-
+import{CSSProperties} from 'vue'
 export interface fromItem{
     // 表单项显示的元素
     type: 'cascader' | 'checkbox' | 'checkbox-group' | 'checkbox-button' | 'color-picker' |
@@ -19,9 +19,11 @@ export interface fromItem{
     // 表单元素特有的属性
     attrs?: {
         // css样式
-        // style?: CSSProperties,
+        style?: CSSProperties,
         clearable?: boolean,
         showPassword?: boolean,
         disabled?: boolean,
+        type?:string
     },
+    children?    :fromItem[]
 }
