@@ -17,14 +17,21 @@
             <template #uploadTip>
                 jpg/png files with a size less than 500KB.
             </template>
+            <template #action="scope">
+                <el-button type="primary" @click="onSubmit(scope)">提交</el-button>
+                <el-button @click="cancel(scope)">重置</el-button>
+            </template>
         </m-form>
     </main>
 </template>
 
 <script lang="ts" setup>
-    import {fromItem} from '../../components/form/type/index'
+    import {FormInstance, fromItem} from '../../components/form/type/index'
     import {ElMessage, ElMessageBox} from 'element-plus'
-
+    interface formScope{
+        form:FormInstance,
+        model:Object
+    }
     let options: fromItem[] = [
         {
             type: 'input',
@@ -150,29 +157,48 @@
             prop: 'upload',
             label: '上传',
             uploadAttrs: {
-                action: 'https://jsonplaceholder.typicode.com/posts/'
-            }
+                action: 'https://jsonplaceholder.typicode.com/posts/',
+                multiple:true,
+                limit:3
+            },
+            rules: [
+                {required: true, message: '请上传文件', trigger: 'blur'},
+            ],
+        },
+        {
+            type: 'editor',
+            value: '123',
+            prop: 'desc',
+            label: '描述',
+            placeholder: '请输入描述',
+            rules: [
+                {
+                    required: true,
+                    message: '描述不能为空',
+                    trigger: 'blur'
+                }
+            ]
         }
     ]
-    const onPreview = (file: any) => {
+    const onPreview = (file: File) => {
         console.log(file)
     }
-    const onRemove = (file: any, fileList: any) => {
+    const onRemove = (file: File, fileList: FileList) => {
         console.log(file, fileList)
     }
-    const onSuccess = (response: any, file: any, fileList: any) => {
+    const onSuccess = (response: any, file: File, fileList: FileList) => {
         console.log(file, response, fileList)
     }
-    const onProgress = (event: any, file: any, fileList: any) => {
+    const onProgress = (event: any, file: File, fileList: FileList) => {
         console.log(file, fileList, event)
     }
-    const onChange = (file: any, fileList: any) => {
+    const onChange = (file: File, fileList: FileList) => {
         console.log(file, fileList)
     }
-    const beforeUpload = (file: any) => {
+    const beforeUpload = (file: File) => {
         console.log(file)
     }
-    const beforeRemove = (file: any, fileList: any) => {
+    const beforeRemove = (file: File, fileList: FileList) => {
         console.log(file, fileList)
         return ElMessageBox.confirm(
             `Cancel the transfert of ${file.name} ?`
@@ -181,7 +207,7 @@
             () => false
         )
     }
-    const onExceed = (file: any, fileList: any) => {
+    const onExceed = (file: File, fileList: FileList) => {
         console.log(file, fileList)
     }
     const onError = (err: any, file: any, fileList: any) => {
@@ -191,6 +217,20 @@
                 file.length + fileList.length
             } totally`
         )
+    }
+    const cancel=(scope:formScope)=>{
+      scope.form.resetFields()
+    }
+    const onSubmit=(scope:formScope)=>{
+        scope.form.validate((valid, fields) => {
+            if (valid) {
+                ElMessage.success(`提交成功`)
+                console.log(scope.model)
+            } else {
+                ElMessage.warning('error submit!')
+                console.log('error submit!', fields)
+            }
+        })
     }
 </script>
 

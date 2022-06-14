@@ -3,7 +3,7 @@
         <el-form v-bind="$attrs" :model="model" :rules="rules" :validate-on-rule-change="false" v-if="model" ref="form">
             <template v-for="item in options" :key="item.prop">
                 <el-form-item v-if="!item.children || item.children.length===0" :label="item.label" :prop="item.prop">
-                    <component v-if="item.type!=='upload'" :is="`el-${item.type}`" v-model="model[item.prop]"
+                    <component v-if="item.type!=='upload' && item.type !== 'editor'" :is="`el-${item.type}`" v-model="model[item.prop]"
                                v-bind="item.attrs" :placeholder="item.placeholder"></component>
                     <el-upload
                             v-if="item.type === 'upload'"
@@ -22,6 +22,9 @@
                         <slot name="uploadArea"></slot>
                         <slot name="uploadTip"></slot>
                     </el-upload>
+                    <div v-if="item.type==='editor'" id="editor">
+
+                    </div>
                 </el-form-item>
                 <el-form-item v-else :label="item.label" :prop="item.prop">
                     <component :is="`el-${item.type}`" v-model="model[item.prop]" v-bind="item.attrs"
@@ -32,7 +35,9 @@
                     </component>
                 </el-form-item>
             </template>
-
+            <el-form-item>
+                <slot name="action" :form="form" :model="model"></slot>
+            </el-form-item>
         </el-form>
     </main>
 </template>
@@ -41,11 +46,14 @@
     import {PropType, ref, reactive, onMounted, watch, nextTick} from 'vue'
     import {fromItem, FormInstance} from '../type/index'
     import cloneDeep from "lodash/cloneDeep";
-    // import type { FormInstance } from 'element-plus'
+    import E from 'wangeditor'
     let props = defineProps({
         options: {
             type: Array as PropType<fromItem[]>,
             required: true
+        },
+        httpRequest:{
+            type:Function
         }
     })
     let emits = defineEmits(['on-preview', 'on-remove', 'on-success', 'on-error', 'on-progress', 'on-change', 'before-upload', 'before-remove', 'on-exceed'])
@@ -59,6 +67,23 @@
             props.options.forEach((item: fromItem) => {
                 m[item.prop!] = item.value
                 r[item.prop!] = item.rules
+                if(item.type==='editor'){
+                    nextTick(()=>{
+                        let elm=document.getElementById('editor')
+                        if(elm){
+                            const editor = new E("#editor")
+                            editor.config.placeholder = item.placeholder!
+                            editor.create()
+                            // 初始化富文本的内容
+                            editor.txt.html(item.value)
+                            //监听文本变化
+                            editor.config.onchange = (newHtml: string) => {
+                                model.value[item.prop!] = newHtml
+                            }
+                        }
+                    })
+
+                }
             })
             model.value = cloneDeep(m)
             rules.value = cloneDeep(r)
@@ -83,8 +108,8 @@
     }
     let onSuccess = (response: any, file: File, fileList: FileList) => {
         // 上传图片成功 给表单上传项赋值
-        // let uploadItem = props.options.find(item => item.type === 'upload')!
-        // model.value[uploadItem.prop!] = {response, file, fileList}
+        let uploadItem = props.options.find(item => item.type === 'upload')!
+        model.value[uploadItem.prop!] = {response, file, fileList}
         emits('on-success', {response, file, fileList})
     }
     let onError = (err: any, file: File, fileList: FileList) => {
@@ -105,9 +130,9 @@
     let onExceed = (files: File, fileList: FileList) => {
         emits('on-exceed', {files, fileList})
     }
-    let httpRequest = () => {
-
-    }
+    // let httpRequest = () => {
+    //
+    // }
 </script>
 
 <style scoped>
