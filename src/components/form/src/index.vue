@@ -3,7 +3,8 @@
         <el-form v-bind="$attrs" :model="model" :rules="rules" :validate-on-rule-change="false" v-if="model" ref="form">
             <template v-for="item in options" :key="item.prop">
                 <el-form-item v-if="!item.children || item.children.length===0" :label="item.label" :prop="item.prop">
-                    <component v-if="item.type!=='upload' && item.type !== 'editor'" :is="`el-${item.type}`" v-model="model[item.prop]"
+                    <component v-if="item.type!=='upload' && item.type !== 'editor'" :is="`el-${item.type}`"
+                               v-model="model[item.prop]"
                                v-bind="item.attrs" :placeholder="item.placeholder"></component>
                     <el-upload
                             v-if="item.type === 'upload'"
@@ -47,30 +48,52 @@
     import {fromItem, FormInstance} from '../type/index'
     import cloneDeep from "lodash/cloneDeep";
     import E from 'wangeditor'
+
     let props = defineProps({
         options: {
             type: Array as PropType<fromItem[]>,
             required: true
         },
-        httpRequest:{
-            type:Function
+        httpRequest: {
+            type: Function
         }
     })
     let emits = defineEmits(['on-preview', 'on-remove', 'on-success', 'on-error', 'on-progress', 'on-change', 'before-upload', 'before-remove', 'on-exceed'])
     let model = ref<any>({})
     let rules = ref<any>({})
     let form = ref<FormInstance | null>()
-    const init = () => {
+    let editors = ref()
+    //
+    let resetFields = () => {
+        form.value!.resetFields()
+        if (props.options && props.options.length) {
+            let editorItem = props.options.find(item => item.type === 'editor')
+            editors.value.txt.html(editorItem!.value)
+        }
+    }
+    let validate = () => {
+        return form.value!.validate
+    }
+    let modelData = () => {
+        return model.value
+    }
+    //分发
+    defineExpose({
+        resetFields,
+        validate,
+        modelData
+    })
+    let init = () => {
         if (props.options && props.options.length) {
             let m: any = {}
             let r: any = {}
             props.options.forEach((item: fromItem) => {
                 m[item.prop!] = item.value
                 r[item.prop!] = item.rules
-                if(item.type==='editor'){
-                    nextTick(()=>{
-                        let elm=document.getElementById('editor')
-                        if(elm){
+                if (item.type === 'editor') {
+                    nextTick(() => {
+                        let elm = document.getElementById('editor')
+                        if (elm) {
                             const editor = new E("#editor")
                             editor.config.placeholder = item.placeholder!
                             editor.create()
@@ -80,6 +103,7 @@
                             editor.config.onchange = (newHtml: string) => {
                                 model.value[item.prop!] = newHtml
                             }
+                            editors.value = editor
                         }
                     })
 
@@ -91,10 +115,6 @@
     }
     onMounted(() => {
         init()
-        // nextTick(() => {
-        //     console.log(form.value!)
-        //     form.value!.clearValidate()
-        // })
     })
     watch(() => props.options, () => {
         init()

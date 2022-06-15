@@ -46,6 +46,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/form',// 表单
                 component:()=>import('../views/form/index.vue')
             },
+            {
+                path:'/modalForm',// 弹出表单
+                component:()=>import('../views/formDialog/index.vue')
+            },
         ]
     }
 

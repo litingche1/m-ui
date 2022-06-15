@@ -1,39 +1,28 @@
 <template>
     <main>
-        <m-form :options="options" label-width="120px" ref="form"
-                @on-preview="onPreview"
-                @on-remove="onRemove"
-                @on-success="onSuccess"
-                @on-error="onError"
-                @on-progress="onProgress"
-                @on-change="onChange"
-                @before-upload="beforeUpload"
-                @before-remove="beforeRemove"
-                @on-exceed="onExceed"
+        <el-button text @click="dialogVisible = true"
+        >click to open the Dialog
+        </el-button
         >
-            <template #uploadArea>
-                <el-button type="primary">Click to upload</el-button>
+        <m-form-dialog :dialogVisible="dialogVisible" @choseDialogVisible="choseDialogVisible" title="弹出表单"
+                       :options="options">
+            <template #footerCon="scope">
+                 <span class="dialog-footer">
+                <el-button @click="cancel(scope.form)">取消</el-button>
+                <el-button type="primary" @click="confirm(scope.form)"
+                >提交</el-button
+                >
+              </span>
             </template>
-            <template #uploadTip>
-                jpg/png files with a size less than 500KB.
-            </template>
-            <template #action="scope">
-                <el-button type="primary" @click="onSubmit(scope)">提交</el-button>
-                <el-button @click="cancel(scope)">重置</el-button>
-            </template>
-        </m-form>
+        </m-form-dialog>
     </main>
 </template>
 
 <script lang="ts" setup>
-    import {FormInstance, fromItem} from '../../components/form/type/index'
+    import {ref} from 'vue'
+    import {fromItem,FormInstance} from "../../components/form/type";
     import {ElMessage, ElMessageBox} from 'element-plus'
-    import { ref } from 'vue'
-    interface formScope{
-        form:FormInstance,
-        model:Object
-    }
-    let form=ref()
+    let dialogVisible = ref(false)
     let options: fromItem[] = [
         {
             type: 'input',
@@ -155,19 +144,6 @@
             ]
         },
         {
-            type: 'upload',
-            prop: 'upload',
-            label: '上传',
-            uploadAttrs: {
-                action: 'https://jsonplaceholder.typicode.com/posts/',
-                multiple:true,
-                limit:3
-            },
-            rules: [
-                {required: true, message: '请上传文件', trigger: 'blur'},
-            ],
-        },
-        {
             type: 'editor',
             value: '',
             prop: 'desc',
@@ -182,57 +158,23 @@
             ]
         }
     ]
-    const onPreview = (file: File) => {
-        console.log(file)
+    const choseDialogVisible = (val: boolean) => {
+        dialogVisible.value = val
     }
-    const onRemove = (file: File, fileList: FileList) => {
-        console.log(file, fileList)
-    }
-    const onSuccess = (response: any, file: File, fileList: FileList) => {
-        console.log(file, response, fileList)
-    }
-    const onProgress = (event: any, file: File, fileList: FileList) => {
-        console.log(file, fileList, event)
-    }
-    const onChange = (file: File, fileList: FileList) => {
-        console.log(file, fileList)
-    }
-    const beforeUpload = (file: File) => {
-        console.log(file)
-    }
-    const beforeRemove = (file: File, fileList: FileList) => {
-        console.log(file, fileList)
-        return ElMessageBox.confirm(
-            `Cancel the transfert of ${file.name} ?`
-        ).then(
-            () => true,
-            () => false
-        )
-    }
-    const onExceed = (file: File, fileList: FileList) => {
-        console.log(file, fileList)
-    }
-    const onError = (err: any, file: any, fileList: any) => {
-        console.log(err, file, fileList)
-        ElMessage.warning(
-            `The limit is 3, you selected ${file.length} files this time, add up to ${
-                file.length + fileList.length
-            } totally`
-        )
-    }
-    const cancel=(scope:formScope)=>{
-      form.value.resetFields()
-    }
-    const onSubmit=(scope:formScope)=>{
-        scope.form.validate((valid, fields) => {
+    let confirm = (form: any) => {
+        let validate = form.validate()
+        validate((valid: boolean) => {
             if (valid) {
-                ElMessage.success(`提交成功`)
-                console.log(scope.model)
+                console.log(form.modelData())
+                ElMessage.success('验证成功')
             } else {
-                ElMessage.warning('error submit!')
-                console.log('error submit!', fields)
+                ElMessage.error('表单填写有误,请检查')
             }
         })
+    }
+    const cancel = (form:any)=>{
+        form.resetFields()
+        dialogVisible.value=false
     }
 </script>
 
