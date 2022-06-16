@@ -4,8 +4,21 @@
         >click to open the Dialog
         </el-button
         >
-        <m-form-dialog :dialogVisible="dialogVisible" @choseDialogVisible="choseDialogVisible" title="弹出表单"
-                       :options="options">
+        <m-form-dialog
+                :dialogVisible="dialogVisible"
+                @choseDialogVisible="choseDialogVisible"
+                title="弹出表单"
+               :options="options"
+                :on-success="handleSuccess"
+                :on-change="handleChange"
+                :isScroll="true"
+        >
+            <template #uploadArea>
+                <el-button type="primary">Click to upload</el-button>
+            </template>
+            <template #uploadTip>
+                jpg/png files with a size less than 500KB.
+            </template>
             <template #footerCon="scope">
                  <span class="dialog-footer">
                 <el-button @click="cancel(scope.form)">取消</el-button>
@@ -20,8 +33,9 @@
 
 <script lang="ts" setup>
     import {ref} from 'vue'
-    import {fromItem,FormInstance} from "../../components/form/type";
+    import {fromItem, FormInstance} from "../../components/form/type";
     import {ElMessage, ElMessageBox} from 'element-plus'
+
     let dialogVisible = ref(false)
     let options: fromItem[] = [
         {
@@ -47,72 +61,72 @@
                 type: "password"
             }
         },
-        {
-            type: 'select',
-            value: '',
-            placeholder: '请选择职位',
-            prop: 'role',
-            label: '职位',
-            attrs: {
-                style: {
-                    width: '100%'
-                },
-            },
-            rules: [
-                {
-                    required: true,
-                    message: 'Please select Activity zone',
-                    trigger: ['blur']
-                }
-            ],
-            children: [
-                {
-                    type: 'option',
-                    label: '经理',
-                    value: '1'
-                },
-                {
-                    type: 'option',
-                    label: '主管',
-                    value: '2'
-                },
-                {
-                    type: 'option',
-                    label: '员工',
-                    value: '3'
-                }
-            ]
-        },
-        {
-            type: 'checkbox-group',
-            value: [],
-            prop: 'like',
-            label: '爱好',
-            rules: [
-                {
-                    required: true,
-                    message: '爱好不能为空',
-                    trigger: 'blur'
-                }
-            ],
-            children: [
-                {
-                    type: 'checkbox',
-                    label: '足球',
-                    value: '1'
-                },
-                {
-                    type: 'checkbox',
-                    label: '篮球',
-                    value: '2'
-                },
-                {
-                    type: 'checkbox',
-                    label: '排球',
-                    value: '3'
-                }
-            ]
-        },
+        // {
+        //     type: 'select',
+        //     value: '',
+        //     placeholder: '请选择职位',
+        //     prop: 'role',
+        //     label: '职位',
+        //     attrs: {
+        //         style: {
+        //             width: '100%'
+        //         },
+        //     },
+        //     rules: [
+        //         {
+        //             required: true,
+        //             message: 'Please select Activity zone',
+        //             trigger: ['change']
+        //         }
+        //     ],
+        //     children: [
+        //         {
+        //             type: 'option',
+        //             label: '经理',
+        //             value: '1'
+        //         },
+        //         {
+        //             type: 'option',
+        //             label: '主管',
+        //             value: '2'
+        //         },
+        //         {
+        //             type: 'option',
+        //             label: '员工',
+        //             value: '3'
+        //         }
+        //     ]
+        // },
+        // {
+        //     type: 'checkbox-group',
+        //     value: [],
+        //     prop: 'like',
+        //     label: '爱好',
+        //     rules: [
+        //         {
+        //             required: true,
+        //             message: '爱好不能为空',
+        //             trigger: 'change'
+        //         }
+        //     ],
+        //     children: [
+        //         {
+        //             type: 'checkbox',
+        //             label: '足球',
+        //             value: '1'
+        //         },
+        //         {
+        //             type: 'checkbox',
+        //             label: '篮球',
+        //             value: '2'
+        //         },
+        //         {
+        //             type: 'checkbox',
+        //             label: '排球',
+        //             value: '3'
+        //         }
+        //     ]
+        // },
         {
             type: 'radio-group',
             value: '',
@@ -144,6 +158,19 @@
             ]
         },
         {
+            type: 'upload',
+            prop: 'upload',
+            label: '上传',
+            uploadAttrs: {
+                action: 'https://jsonplaceholder.typicode.com/posts/',
+                multiple: true,
+                limit: 3
+            },
+            rules: [
+                {required: true, message: '请上传文件', trigger: 'blur'},
+            ],
+        },
+        {
             type: 'editor',
             value: '',
             prop: 'desc',
@@ -172,9 +199,17 @@
             }
         })
     }
-    const cancel = (form:any)=>{
+    const cancel = (form: any) => {
         form.resetFields()
-        dialogVisible.value=false
+        dialogVisible.value = false
+    }
+    let handleSuccess = (val: any) => {
+        console.log('success')
+        console.log(val)
+    }
+    let handleChange = (val: any) => {
+        console.log('change')
+        console.log(val)
     }
 </script>
 

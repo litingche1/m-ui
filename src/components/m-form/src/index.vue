@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main :class="{'m-ui-el-dialog__body':isScroll}">
         <el-dialog
                 v-model="show"
                 width="50%"
@@ -7,13 +7,25 @@
                 :before-close="handleClose"
         >
             <template #default>
-                <m-form :options="options" label-width="120px" ref="form"
+                <m-form
+                        :options="options"
+                        label-width="120px"
+                        ref="form"
+                        @on-preview="onPreview"
+                        @on-remove="onRemove"
+                        @on-success="onSuccess"
+                        @on-error="onError"
+                        @on-progress="onProgress"
+                        @on-change="onChange"
+                        @before-upload="beforeUpload"
+                        @before-remove="beforeRemove"
+                        @on-exceed="onExceed"
                 >
                     <template #uploadArea>
-                        <el-button type="primary">Click to upload</el-button>
+                        <slot name="uploadArea"></slot>
                     </template>
                     <template #uploadTip>
-                        jpg/png files with a size less than 500KB.
+                        <slot name="uploadTip"></slot>
                     </template>
                 </m-form>
             </template>
@@ -33,13 +45,44 @@
             type: Boolean,
             value: false,
         },
+        isScroll:{
+            type: Boolean,
+            value: false,
+        },
         options: {
             type: Array as PropType<fromItem[]>,
             required: true
         },
+        onPreview: {
+            type: Function
+        },
+        onRemove: {
+            type: Function
+        },
+        onSuccess: {
+            type: Function
+        },
+        onError: {
+            type: Function
+        },
+        onProgress: {
+            type: Function
+        },
+        onChange: {
+            type: Function
+        },
+        beforeUpload: {
+            type: Function
+        },
+        beforeRemove: {
+            type: Function
+        },
+        onExceed: {
+            type: Function
+        },
 
     })
-    let form=ref()
+    let form = ref()
     let emits = defineEmits(['choseDialogVisible'])
     let show = ref(props.dialogVisible)
     const handleClose = () => {
