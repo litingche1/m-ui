@@ -50,6 +50,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/modalForm',// 弹出表单
                 component:()=>import('../views/formDialog/index.vue')
             },
+            {
+                path:'/table',// 表格
+                component:()=>import('../views/table/index.vue')
+            },
         ]
     }
 

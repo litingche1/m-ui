@@ -11,6 +11,7 @@ import chooseDate from './chooseDate'
 import area from './chooseCitys'
 import form from './form'
 import formDialog from './m-form'
+import table from './table'
 const components=[
     chooseIcon,
     chooseCity,
@@ -23,7 +24,8 @@ const components=[
     chooseDate,
     area,
     form,
-    formDialog
+    formDialog,
+    table
 ]
 export default {
     install(app:App){
