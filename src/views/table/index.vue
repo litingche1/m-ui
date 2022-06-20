@@ -1,6 +1,13 @@
 <template>
     <main>
-    <m-table :options="options" :tableData="data">
+    <m-table
+            :options="options"
+            :tableData="data"
+            elementLoadingText="加载中..."
+            elementLoadingBackground="rgba(0,0,0,.8)"
+            :element-loading-svg="svg"
+            element-loading-svg-view-box="-10, -10, 50, 50"
+    >
         <template #date="{data}">
             <el-icon-timer></el-icon-timer>
             <span style="margin-left: 10px">{{ data.row.date }}</span>
@@ -17,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+    import{ref} from 'vue'
     import {TableOptions} from "../../components/table/src/type";
     let options: TableOptions[] = [
         {
@@ -44,28 +52,41 @@
             align: 'center'
         }
     ]
-    let data=[
-        {
-            date: '2016-05-03',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-            date: '2016-05-02',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-            date: '2016-05-04',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-            date: '2016-05-01',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-        },
-    ]
+    let data=ref<any[]>([])
+    let svg = `
+        <path class="path" d="
+          M 30 15
+          L 28 17
+          M 25.61 25.61
+          A 15 15, 0, 0, 1, 15 30
+          A 15 15, 0, 1, 1, 27.99 7.5
+          L 15 15
+        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
+      `
+    setTimeout(()=>{
+        data.value=[
+            {
+                date: '2016-05-03',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles',
+            },
+            {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles',
+            },
+            {
+                date: '2016-05-04',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles',
+            },
+            {
+                date: '2016-05-01',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles',
+            },
+        ]
+    },3000)
     let edit=(data:any)=>{
         console.log(data)
     }
