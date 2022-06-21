@@ -7,6 +7,8 @@
             elementLoadingBackground="rgba(0,0,0,.8)"
             :element-loading-svg="svg"
             element-loading-svg-view-box="-10, -10, 50, 50"
+            editIcon="eleme"
+            @confirm="confirm"
     >
         <template #date="{data}">
             <el-icon-timer></el-icon-timer>
@@ -14,6 +16,10 @@
         </template>
         <template #name="{data}">
             <span>{{data.row.name}}</span>
+        </template>
+        <template #cellEdit>
+            <el-button size="small" type="primary" >编辑</el-button>
+            <el-button size="small" type="danger">删除</el-button>
         </template>
         <template #action="scope">
             <el-button size="small" type="primary" @click="edit(scope.scope)">编辑</el-button>
@@ -33,6 +39,7 @@
             // width: '180',
             align: 'center',
             slot: 'date',
+            edit:true
         },
         {
             prop: 'name',
@@ -88,6 +95,9 @@
         ]
     },3000)
     let edit=(data:any)=>{
+        console.log(data)
+    }
+    let confirm=(data:any)=>{
         console.log(data)
     }
 </script>

@@ -11,5 +11,6 @@ export interface TableOptions{
     slot?: string,
     // 是否是操作项
     action?: boolean,
-
+    //是否编辑
+    edit?:boolean
 }
