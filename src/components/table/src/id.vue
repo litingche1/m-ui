@@ -16,7 +16,6 @@
                 <el-table-column :prop="item.prop" :label="item.label" :width="item.width" >
                     <template #default="scope" >
                         <template v-if="scope.row.isEdit">
-                            {{scope.row.isEdit}}
                             <el-input v-model="scope.row[item.prop]"></el-input>
                         </template>
                         <template v-else>
@@ -57,8 +56,7 @@
     import {PropType, computed,ref,onMounted,watch} from 'vue'
     import {TableOptions} from './type'
     import {toLine} from '../../../units';
-    import _ from 'lodash';
-    // import cloneDeep from "lodash/cloneDeep";
+    import cloneDeep from "lodash/cloneDeep";
     let props = defineProps({
         tableData: {
             type: Array,
@@ -101,7 +99,7 @@
             default:''
         }
     })
-    let dataList=ref<any[]>([])
+    let dataList=ref<any[]>(cloneDeep(props.tableData))
     let editRowIndex=ref<string>(props.editRowIdx)
     let emits = defineEmits(['confirm','cancel'])
     let editDom=ref<string>('')
@@ -132,7 +130,8 @@
         })
     })
     watch(()=>props.tableData,val=>{
-        dataList.value=_.cloneDeep(val)
+        dataList.value=val
+        console.log(dataList.value)
         dataList.value.map(item=>{
             item.isEdit=false
         })
@@ -145,11 +144,23 @@
     let rowClick=(row:any, column:any)=>{
         if(column.label===actionOption.value[0].label){
             if(props.editRow && editRowIndex.value===props.editRowIdx){
-                row.isEdit=!row.isEdit
-                dataList.value.map((item,idx)=>{
-                    if(item!=row) item.isEdit=false
-                })
+                console.log(row,column)
+                // row.isEdit=!row.isEdit
+                // console.log(row.isEdit)
+                // dataList.value.map(item=>{
+                //     item.isEdit=true
+                // })
+                // row.isEdit=!row.isEdit
+                dataList.value.map(item=>{
 
+                    if(item.id==row.id){
+                        console.log(row)
+                        item.isEdit=true
+                    } else{
+                        console.log(row)
+                        item.isEdit=false
+                    }
+                })
             }
         }
     }

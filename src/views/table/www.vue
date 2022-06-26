@@ -1,37 +1,37 @@
 <template>
     <main>
-    <m-table
-            :options="options"
-            :tableData="data"
-            elementLoadingText="加载中..."
-            elementLoadingBackground="rgba(0,0,0,.8)"
-            :element-loading-svg="svg"
-            element-loading-svg-view-box="-10, -10, 50, 50"
-            editIcon="eleme"
-            :editRowIdx="editRowIdx"
-            :editRow="true"
-            @confirm="confirm"
-    >
-<!--        <template #date="{data}">-->
-<!--            <el-icon-timer></el-icon-timer>-->
-<!--            <span style="margin-left: 10px">{{ data.row.date }}</span>-->
-<!--        </template>-->
-<!--        <template #name="{data}">-->
-<!--            <span>{{data.row.name}}</span>-->
-<!--        </template>-->
-        <template #cellEdit>
-            <el-button size="small" type="primary" >编辑</el-button>
-            <el-button size="small" type="danger">删除</el-button>
-        </template>
-        <template #action="scope">
-            <el-button size="small" type="primary" @click="edit(scope.scope)">编辑</el-button>
-            <el-button size="small" type="danger">删除</el-button>
-        </template>
-        <template #isEdit="scope">
-            <el-button size="small" type="primary">确认</el-button>
-            <el-button size="small" type="danger">取消</el-button>
-        </template>
-    </m-table>
+        <m-table
+                :options="options"
+                :tableData="data"
+                elementLoadingText="加载中..."
+                elementLoadingBackground="rgba(0,0,0,.8)"
+                :element-loading-svg="svg"
+                element-loading-svg-view-box="-10, -10, 50, 50"
+                editIcon="eleme"
+                :editRowIdx="editRowIdx"
+                :editRow="true"
+                @confirm="confirm"
+        >
+            <template #date="{data}">
+                <el-icon-timer></el-icon-timer>
+                <span style="margin-left: 10px">{{ data.row.date }}</span>
+            </template>
+            <template #name="{data}">
+                <span>{{data.row.name}}</span>
+            </template>
+            <template #cellEdit>
+                <el-button size="small" type="primary" >编辑</el-button>
+                <el-button size="small" type="danger">删除</el-button>
+            </template>
+            <template #action="scope">
+                <el-button size="small" type="primary" @click="edit(scope.scope)">编辑</el-button>
+                <el-button size="small" type="danger">删除</el-button>
+            </template>
+            <template #isEdit="scope">
+                <el-button size="small" type="primary">确认</el-button>
+                <el-button size="small" type="danger">取消</el-button>
+            </template>
+        </m-table>
     </main>
 </template>
 
@@ -44,7 +44,7 @@
             label: '日期',
             // width: '180',
             align: 'center',
-            // slot: 'date',
+            slot: 'date',
             edit:true
         },
         {
@@ -52,7 +52,7 @@
             label: '姓名',
             // width: '180',
             align: 'center',
-            // slot: 'name'
+            slot: 'name'
         },
         {
             prop: 'address',
