@@ -21,7 +21,7 @@
                         </template>
                         <template v-else>
                             <template v-if="editDom===scope.$index+scope.column.id">
-                                <div class="edit-box" @click="closeEditBox">
+                                <div class="edit-box" @click.stop="closeEditBox">
                                     <el-input size="small" v-model="scope.row[item.prop]"></el-input>
                                     <div>
                                         <slot name="cellEdit" v-if="$slots.cellEdit" :scope="scope"></slot>
@@ -102,8 +102,8 @@
         }
     })
     let dataList=ref<any[]>([])
-    let editRowIndex=ref<string>(props.editRowIdx)
-    let emits = defineEmits(['confirm','cancel'])
+    let editRowIndex=ref<string>('1')
+    let emits = defineEmits(['confirm','cancel','update:editRowIdx'])
     let editDom=ref<string>('')
     let loading= computed(()=> !props.tableData || !(props.tableData.length>0))
     let tableOption = computed(() =>   {
@@ -138,18 +138,22 @@
         })
     },{deep:true})
     watch(()=>props.editRowIdx,val=>{
+        console.log(val)
         if(val){
-            editRowIndex.value=val
+            editRowIndex.value=_.cloneDeep(val)
         }
     })
-    let rowClick=(row:any, column:any)=>{
+    let rowClick=(row:any, column:any,event:any)=>{//event可以知道触发点击的事件源
+        console.log(event)
+        if(!column) return false
         if(column.label===actionOption.value[0].label){
             if(props.editRow && editRowIndex.value===props.editRowIdx){
                 row.isEdit=!row.isEdit
                 dataList.value.map((item,idx)=>{
                     if(item!=row) item.isEdit=false
                 })
-
+                console.log(row.isEdit)
+              if(!row.isEdit) emits('update:editRowIdx','')
             }
         }
     }
