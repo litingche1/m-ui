@@ -10,7 +10,15 @@
             editIcon="eleme"
             v-model:editRowIdx="editRowIdx"
             :editRow="true"
+            pagination
+            stripe
+            border
+            :total="total"
+            :currentPage="current"
+            :pageSize="pageSize"
             @confirm="confirm"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
     >
         <template #date="{data}">
             <el-icon-timer></el-icon-timer>
@@ -36,8 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-    import{ref} from 'vue'
+    import{ref,onMounted} from 'vue'
     import {TableOptions} from "../../components/table/src/type";
+    import axios from 'axios'
     let options: TableOptions[] = [
         {
             prop: 'date',
@@ -77,34 +86,60 @@
           L 15 15
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
-    setTimeout(()=>{
-        data.value=[
-            {
-                date: '2016-05-03',
-                name: 'Tom',
-                id:1,
-                address: 'No. 189, Grove St, Los Angeles',
-            },
-            {
-                date: '2016-05-02',
-                name: 'Tom',
-                id:2,
-                address: 'No. 189, Grove St, Los Angeles',
-            },
-            {
-                date: '2016-05-04',
-                name: 'Tom',
-                id:3,
-                address: 'No. 189, Grove St, Los Angeles',
-            },
-            {
-                date: '2016-05-01',
-                name: 'Tom',
-                id:4,
-                address: 'No. 189, Grove St, Los Angeles',
-            },
-        ]
-    },3000)
+    let current = ref<number>(1)
+    let pageSize = ref<number>(10)
+    let total = ref<number>(0)
+    let getData = () => {
+        axios.post('/api/list', {
+            current: current.value,
+            pageSize: pageSize.value,
+        }).then((res: any) => {
+            if (res.data.code === '200') {
+                data.value = res.data.data.rows
+                total.value = res.data.data.total
+                console.log(res.data.data)
+            }
+        })
+    }
+    let handleSizeChange = (val: number) => {
+        pageSize.value = val
+        getData()
+    }
+    let handleCurrentChange = (val: number) => {
+        current.value = val
+        getData()
+    }
+    onMounted(() => {
+        getData()
+    })
+    // setTimeout(()=>{
+    //     data.value=[
+    //         {
+    //             date: '2016-05-03',
+    //             name: 'Tom',
+    //             id:1,
+    //             address: 'No. 189, Grove St, Los Angeles',
+    //         },
+    //         {
+    //             date: '2016-05-02',
+    //             name: 'Tom',
+    //             id:2,
+    //             address: 'No. 189, Grove St, Los Angeles',
+    //         },
+    //         {
+    //             date: '2016-05-04',
+    //             name: 'Tom',
+    //             id:3,
+    //             address: 'No. 189, Grove St, Los Angeles',
+    //         },
+    //         {
+    //             date: '2016-05-01',
+    //             name: 'Tom',
+    //             id:4,
+    //             address: 'No. 189, Grove St, Los Angeles',
+    //         },
+    //     ]
+    // },3000)
     let edit=(data:any)=>{
         editRowIdx.value='edit'
         console.log(data)

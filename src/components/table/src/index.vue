@@ -1,55 +1,68 @@
 <template>
     <main>
-        <el-table
-                :data="dataList"
-                style="width: 100%"
-                v-loading="loading"
-                :element-loading-text="elementLoadingText"
-                :element-loading-spinner="elementLoadingSpinner"
-                :element-loading-svg-view-box="elementLoadingSvgViewBox"
-                :element-loading-background="elementLoadingBackground"
-                :element-loading-svg="elementLoadingSvg"
-                @row-click="rowClick"
-                v-bind="$attrs"
-        >
-            <template v-for="item in tableOption" :key="item.prop">
-                <el-table-column :prop="item.prop" :label="item.label" :width="item.width" >
-                    <template #default="scope" >
-                        <template v-if="scope.row.isEdit">
-                            {{scope.row.isEdit}}
-                            <el-input v-model="scope.row[item.prop]"></el-input>
-                        </template>
-                        <template v-else>
-                            <template v-if="editDom===scope.$index+scope.column.id">
-                                <div class="edit-box" @click.stop="closeEditBox">
-                                    <el-input size="small" v-model="scope.row[item.prop]"></el-input>
-                                    <div>
-                                        <slot name="cellEdit" v-if="$slots.cellEdit" :scope="scope"></slot>
-                                        <div class="action-icon" v-else>
-                                            <el-icon-check class="check" @click.stop="check(scope)"></el-icon-check>
-                                            <el-icon-close class="close" @click.stop="close(scope)"></el-icon-close>
-                                        </div>
-                                    </div>
-                                </div>
+        <section>
+            <el-table
+                    :data="dataList"
+                    style="width: 100%"
+                    v-loading="loading"
+                    :element-loading-text="elementLoadingText"
+                    :element-loading-spinner="elementLoadingSpinner"
+                    :element-loading-svg-view-box="elementLoadingSvgViewBox"
+                    :element-loading-background="elementLoadingBackground"
+                    :element-loading-svg="elementLoadingSvg"
+                    @row-click="rowClick"
+                    v-bind="$attrs"
+            >
+                <template v-for="item in tableOption" :key="item.prop">
+                    <el-table-column :prop="item.prop" :label="item.label" :width="item.width" >
+                        <template #default="scope" >
+                            <template v-if="scope.row.isEdit">
+                                {{scope.row.isEdit}}
+                                <el-input v-model="scope.row[item.prop]"></el-input>
                             </template>
                             <template v-else>
-                                <slot v-if="item.slot" :name="item.slot" :data="scope"></slot>
-                                <span v-else>{{scope.row[item.prop]}}</span>
-                                <component :is="`el-icon-${toLine(editIcon)}`" class="edit"  @click.stop="clickEditIcon(scope)" v-if="item.edit"></component>
+                                <template v-if="editDom===scope.$index+scope.column.id">
+                                    <div class="edit-box" @click.stop="closeEditBox">
+                                        <el-input size="small" v-model="scope.row[item.prop]"></el-input>
+                                        <div>
+                                            <slot name="cellEdit" v-if="$slots.cellEdit" :scope="scope"></slot>
+                                            <div class="action-icon" v-else>
+                                                <el-icon-check class="check" @click.stop="check(scope)"></el-icon-check>
+                                                <el-icon-close class="close" @click.stop="close(scope)"></el-icon-close>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <slot v-if="item.slot" :name="item.slot" :data="scope"></slot>
+                                    <span v-else>{{scope.row[item.prop]}}</span>
+                                    <component :is="`el-icon-${toLine(editIcon)}`" class="edit"  @click.stop="clickEditIcon(scope)" v-if="item.edit"></component>
+                                </template>
                             </template>
                         </template>
-                    </template>
-                </el-table-column>
-            </template>
-            <template v-for="item in actionOption" :key="item.prop">
-                <el-table-column :prop="item.prop" :label="item.label" :width="item.width" >
-                    <template #default="scope">
-                        <slot name="isEdit" :scope="scope" v-if="scope.row.isEdit"></slot>
-                        <slot name="action" :scope="scope" v-else></slot>
-                    </template>
-                </el-table-column>
-            </template>
-        </el-table>
+                    </el-table-column>
+                </template>
+                <template v-for="item in actionOption" :key="item.prop">
+                    <el-table-column :prop="item.prop" :label="item.label" :width="item.width" >
+                        <template #default="scope">
+                            <slot name="isEdit" :scope="scope" v-if="scope.row.isEdit"></slot>
+                            <slot name="action" :scope="scope" v-else></slot>
+                        </template>
+                    </el-table-column>
+                </template>
+            </el-table>
+        </section>
+        <section v-if="pagination && !loading" class="pagination" :style="{ justifyContent }">
+            <el-pagination
+                    v-model:currentPage="currentPage"
+                    :page-sizes="pageSizes"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+            ></el-pagination>
+        </section>
     </main>
 </template>
 
@@ -99,13 +112,43 @@
         editRowIdx:{
             type: String,
             default:''
+        },
+        // 是否显示分页
+        pagination: {
+            type: Boolean,
+            default: false
+        },
+        // 显示分页的对齐方式
+        paginationAlign: {
+            type: String as PropType<'left' | 'center' | 'right'>,
+            default: 'left'
+        },
+        // 当前是第几页
+        currentPage: {
+            type: Number,
+            default: 1
+        },
+        // 当前一页多少条数据
+        pageSize: {
+            type: Number,
+            default: 10
+        },
+        // 显示分页数据多少条的选项
+        pageSizes: {
+            type: Array,
+            default: () => [10, 20, 30, 40]
+        },
+        // 数据总条数
+        total: {
+            type: Number,
+            default: 0
         }
     })
     let dataList=ref<any[]>([])
     let editRowIndex=ref<string>('1')
-    let emits = defineEmits(['confirm','cancel','update:editRowIdx'])
+    let emits = defineEmits(['confirm','cancel','update:editRowIdx','size-change', 'current-change'])
     let editDom=ref<string>('')
-    let loading= computed(()=> !props.tableData || !(props.tableData.length>0))
+    let loading= computed(()=> !props.tableData || !props.tableData.length)
     let tableOption = computed(() =>   {
         return props.options.filter(item => !item.action)
     })
@@ -157,6 +200,17 @@
             }
         }
     }
+    let handleSizeChange=(val:any)=>{
+        emits('size-change',val)
+    }
+    let handleCurrentChange=(val:any)=>{
+        emits('current-change',val)
+    }
+    let justifyContent=computed(()=>{
+        if (props.paginationAlign === 'left') return 'flex-start'
+        else if (props.paginationAlign === 'right') return 'flex-end'
+        else return 'center'
+    })
 </script>
 
 <style scoped>
@@ -187,5 +241,9 @@
     .close {
         color: green;
     }
+    }
+    .pagination {
+        margin-top: 16px;
+        display: flex;
     }
 </style>
