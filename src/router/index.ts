@@ -54,6 +54,10 @@ const routes:RouteRecordRaw[]=[
                 path:'/table',// 表格
                 component:()=>import('../views/table/index.vue')
             },
+            {
+                path:'/calendar',// 日历
+                component:()=>import('../views/calendar/index.vue')
+            },
         ]
     }
 

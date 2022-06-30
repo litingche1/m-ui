@@ -12,6 +12,7 @@ import area from './chooseCitys'
 import form from './form'
 import formDialog from './m-form'
 import table from './table'
+import calendar from './calendar'
 const components=[
     chooseIcon,
     chooseCity,
@@ -25,7 +26,8 @@ const components=[
     area,
     form,
     formDialog,
-    table
+    table,
+    calendar
 ]
 export default {
     install(app:App){
