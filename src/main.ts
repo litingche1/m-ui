@@ -4,7 +4,9 @@ import router from './router/index'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import mUI from './components/index'
+// import mUI from './components/index'
+import mUI from "../lib/li-element-components.es"
+import '../lib/style.css'
 import './mock'
 import {toLine} from "./units";
 const app = createApp(App)

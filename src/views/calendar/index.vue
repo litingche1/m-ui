@@ -1,5 +1,5 @@
 <template>
-    <m-calendar :events="events"  @date-click="dateClick" @event-click="eventClick"></m-calendar>
+    <m-calendar :events="events" :eventContent="eventContent"  @date-click="dateClick" @event-click="eventClick"></m-calendar>
 </template>
 
 <script lang="ts" setup>
@@ -32,6 +32,21 @@
     }
     let eventClick=(info: EventContentArg)=>{
         console.log(info)
+    }
+    let eventContent = (arg: EventContentArg) => {
+        let el = document.createElement('div')
+        let timeTextArr = arg.timeText.split(' - ')
+        let start = timeTextArr[0].replace('上午', '').replace('下午', '').replace('时', '')
+        let end = timeTextArr[1].replace('上午', '').replace('下午', '').replace('时', '')
+        el.innerHTML = `
+        <img src="src/assets/logo.png" style="width:20px;height:20px;">
+         <div>开始时间: ${start}</div>
+         <div>结束时间: ${end}</div>
+         <div>标题: ${arg.event._def.title}</div>
+        `
+        return {
+            domNodes: [el]
+        }
     }
 </script>
 
